@@ -1,0 +1,441 @@
+{
+  "info": {
+    "_postman_id": "96a4b44d-2562-4f9c-95b5-cb9c5a2d92ed",
+    "name": "Jelveh Demo Collection",
+    "description": "### Welcome to Postman! This is your first collection.\n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests  \n• Test your API in real-world scenarios  \n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54211204",
+    "_collection_link": "https://go.postman.co/collection/54211204-96a4b44d-2562-4f9c-95b5-cb9c5a2d92ed?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "United States Of America",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Array length, status code, array response, nested object values, response structure keys",
+              "",
+              "",
+              "pm.test(\"Status code is 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const countryData = pm.response.json();",
+              "const expectedTimezones = [",
+              "    \"UTC-12:00\",",
+              "    \"UTC-11:00\",",
+              "    \"UTC-10:00\",",
+              "    \"UTC-09:00\",",
+              "    \"UTC-08:00\",",
+              "    \"UTC-07:00\",",
+              "    \"UTC-06:00\",",
+              "    \"UTC-05:00\",",
+              "    \"UTC-04:00\",",
+              "    \"UTC+10:00\",",
+              "    \"UTC+12:00\"",
+              "];",
+              "",
+              "const requiredKeys = [",
+              "        \"tld\",",
+              "        \"cca2\",",
+              "        \"ccn3\",",
+              "        \"cca3\",",
+              "        \"independent\",",
+              "        \"status\",",
+              "        \"unMember\",",
+              "        \"idd\",",
+              "        \"capital\",",
+              "        \"altSpellings\",",
+              "        \"region\",",
+              "        \"subregion\",",
+              "        \"landlocked\",",
+              "        \"area\",",
+              "        \"maps\",",
+              "        \"population\",",
+              "        \"car\",",
+              "        \"timezones\",",
+              "        \"continents\",",
+              "        \"flag\",",
+              "        \"name\",",
+              "        \"currencies\",",
+              "        \"languages\",",
+              "        \"latlng\",",
+              "        \"demonyms\",",
+              "        \"translations\",",
+              "        \"flags\",",
+              "        \"coatOfArms\",",
+              "        \"startOfWeek\",",
+              "        \"capitalInfo\",",
+              "        \"postalCode\"",
+              "    ];",
+              "",
+              "pm.test(\"Capital is Washington, D.C.\", () => {",
+              "    pm.expect(countryData[0].capital[0]).to.eql(\"Washington, D.C.\");",
+              "});",
+              "",
+              "pm.test(\"Flag is reflected correctly\", () => {",
+              "    pm.expect(countryData[0].flag).to.eql(\"🇺🇸\");",
+              "});",
+              "",
+              "pm.test(\"Population is greater than 340 million\", () => {",
+              "    pm.expect(countryData[0].population).to.be.above(340000000);",
+              "});",
+              "",
+              "pm.test(\"There are 317 suffixes\", () => {",
+              "    pm.expect(countryData[0].idd.suffixes.length).to.eql(317);",
+              "});",
+              "",
+              "pm.test(\"Timezones have correct values\", function () {",
+              "    pm.expect(countryData[0].timezones).to.eql(expectedTimezones);",
+              "});",
+              "",
+              "// Schema validation",
+              "pm.test(\"Response structure should have all required keys \", () => {",
+              "   countryData.forEach((item, index) => {",
+              "        requiredKeys.forEach((key) => {",
+              "            pm.expect(",
+              "                item,",
+              "                `Object at index ${index} is missing key: ${key}`",
+              "            ).to.have.property(key);",
+              "        });",
+              "    });",
+              "});",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{restCountriesBaseUrl}}/name/united%20states",
+          "host": [
+            "{{restCountriesBaseUrl}}"
+          ],
+          "path": [
+            "name",
+            "united%20states"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create user",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const randomNum = Math.floor(Math.random() * 100000);",
+              "",
+              "pm.environment.set(",
+              "    \"randomEmail\",",
+              "    `user${randomNum}@jgtest.com`",
+              ");",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "const jsonData = pm.response.json();",
+              "// const id = Number(jsonData.id);",
+              "const expectedEmail = pm.environment.get(\"randomEmail\");",
+              "pm.environment.set(\"userId\", jsonData.id);",
+              "",
+              "pm.test(\"User ID saved\", function () {",
+              "    pm.expect(jsonData.id).to.exist;",
+              "});",
+              "",
+              "pm.test(\"Email address is correct\", function () {",
+              "    pm.expect(jsonData.email).to.eql(expectedEmail);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Jelveh Demo Tester\",\n  \"email\": \"{{randomEmail}}\"\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{CRUDbaseUrl}}/users",
+          "host": [
+            "{{CRUDbaseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Verify user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const jsonData = pm.response.json();",
+              "const expectedEmail = pm.environment.get(\"randomEmail\");",
+              "const schema = {",
+              "    type: \"object\",",
+              "    required: [\"id\", \"name\", \"email\", \"createdAt\"],",
+              "    properties: {",
+              "        id: { type: \"string\" },",
+              "        name: { type: \"string\" },",
+              "        email: { type: \"string\" },",
+              "        createdAt: { type: \"string\" }",
+              "    }",
+              "};",
+              "",
+              "pm.test(\"Email address is correct\", function () {",
+              "    pm.expect(jsonData.email).to.eql(expectedEmail);",
+              "});",
+              "",
+              "pm.test(\"Schema is valid\", function () {",
+              "    pm.response.to.have.jsonSchema(schema);",
+              "});",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{CRUDbaseUrl}}/users/{{userId}}",
+          "host": [
+            "{{CRUDbaseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Jelveh Updated\",\n  \"email\": \"replacedEmail@test.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{CRUDbaseUrl}}/users/{{userId}}",
+          "host": [
+            "{{CRUDbaseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Verify user update",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const jsonData = pm.response.json();",
+              "",
+              "",
+              "pm.test(\"Email address is correct\", function () {",
+              "    pm.expect(jsonData.email).to.eql(\"replacedEmail@test.com\");",
+              "});",
+              "",
+              "pm.test(\"Name is correct\", function () {",
+              "    pm.expect(jsonData.name).to.eql(\"Jelveh Updated\");",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{CRUDbaseUrl}}/users//{{userId}}",
+          "host": [
+            "{{CRUDbaseUrl}}"
+          ],
+          "path": [
+            "users",
+            "",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Deleted successfully\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+              "});",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{CRUDbaseUrl}}/users/{{userId}}",
+          "host": [
+            "{{CRUDbaseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Verify user deletion",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "",
+              "pm.test(\"Verify user name and email are non-existant\", function () {",
+              "    pm.expect(pm.response.text()).not.to.include([\"Jelveh Updated\",\"replacedEmail@test.com\"]);",
+              "});",
+              "",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{CRUDbaseUrl}}/users",
+          "host": [
+            "{{CRUDbaseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
