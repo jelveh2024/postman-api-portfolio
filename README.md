@@ -15,5 +15,5 @@ This repository contains API testing examples using Postman.
 2. Import environment
 3. Run using Postman's collection run feature or via the following steps
 4. Install Newman: sudo npm install -g newman
-5. Install newman-reporter-html: Sudo npm install newman-reporter-html
+5. Install newman-reporter-html: sudo npm install newman-reporter-html
 6. On command line: npx newman run postman_collection.json -e postman_environment.json --reporters cli,html --reporter-html-export report.html
