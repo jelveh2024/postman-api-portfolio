@@ -1,4 +1,4 @@
-# postman-api-portfolio
+# sample1
 This repository contains API testing examples using Postman.
 
 ## Included
